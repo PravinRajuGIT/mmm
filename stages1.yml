@@ -1,5 +1,15 @@
 trigger: none
 
+resources:
+  repositories:
+  - repository: mmm
+    type: git
+    name: mmm
+
+  - repository: nnn
+    type: git
+    name: nnn
+
 stages:
 # -------------------------
 # STAGE 1 – BUILD
@@ -14,7 +24,19 @@ stages:
       runOnce:
         deploy:
           steps:
-          - script: echo "Build stage executed"
+          - checkout: self
+            displayName: "Checkout primary repo"
+
+          - checkout: mmm
+            displayName: "Checkout mmm repo"
+
+          - checkout: nnn
+            displayName: "Checkout nnn repo"
+
+          - script: |
+              echo "Build stage executed"
+              echo "Repos available under:"
+              echo "$(Pipeline.Workspace)"
             displayName: "Build Step"
 
 # -------------------------
@@ -32,6 +54,15 @@ stages:
       runOnce:
         deploy:
           steps:
+          - checkout: self
+            displayName: "Checkout primary repo"
+
+          - checkout: mmm
+            displayName: "Checkout mmm repo"
+
+          - checkout: nnn
+            displayName: "Checkout nnn repo"
+
           - script: echo "Test stage executed after approval"
             displayName: "Test Step"
 
@@ -50,6 +81,15 @@ stages:
       runOnce:
         deploy:
           steps:
+          - checkout: self
+            displayName: "Checkout primary repo"
+
+          - checkout: mmm
+            displayName: "Checkout mmm repo"
+
+          - checkout: nnn
+            displayName: "Checkout nnn repo"
+
           - script: echo "Production deployment executed after approval"
             displayName: "Deploy Step"
 
@@ -63,3 +103,6 @@ stages:
 #adding line 8 and associating this change with work item id:330 (issue work item type)
 #Adding line 9 and associating this change with the same work item id: 330
 #Adding line 10 and associating this change to new work item id: 331 (issue work item type)
+#Removed the line 11 and now readding it with a new commit id.
+#Adding line 12 to test the action item - source version related check
+#Adding line 13
